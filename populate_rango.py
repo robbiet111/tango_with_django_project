@@ -45,9 +45,15 @@ def populate():
     # The code below goes through the cats dictionary, then adds each category,
     # and then adds all the associated pages for that category.
     for cat, cat_data in cats.items():
-        c = add_cat(cat)
+        if cat == "Python":
+            likes,views = 64,128
+        elif cat == "Django":
+            likes,views = 32,64
+        else:
+            likes,views = 16,32
+        c = add_cat(cat, likes, views)
         for p in cat_data['pages']:
-            add_page(c, p['title'], p['url'])
+            add_page(c, p['title'], p['url'],)
 
     # Print out the categories we have added.
     for c in Category.objects.all():
@@ -55,16 +61,14 @@ def populate():
             print(f'- {c}: {p}')
 
 def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
+    p = Page.objects.get_or_create(category=cat, title=title,)[0]
     p.url=url
     p.views=views
     p.save()
     return p
 
-def add_cat(name,views=0,likes=0):
-    c = Category.objects.get_or_create(name=name)[0]
-    c.views=views
-    c.likes=likes
+def add_cat(name, likes=0, views=0):
+    c = Category.objects.get_or_create(name=name, likes=likes, views=views)[0]
     c.save()
     return c
 
